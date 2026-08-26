@@ -1,0 +1,78 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{times}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+\usepackage{enumitem}
+
+\titleformat{\section}{\normalfont\bfseries\large}{}{0pt}{}
+\titlespacing{\section}{0pt}{10pt}{4pt}
+\pagenumbering{gobble}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\linespread{0.97}
+
+\begin{document}
+
+{\small Akshat G \hfill \url{https://voyager2005.github.io} \par}
+\vspace{4pt}
+\hrule
+\vspace{8pt}
+
+My research interests lie in developing efficient, data-centric, and interpretable machine learning systems.  There is emphasis on the fact that quality, relevance, and utilization of training data can be as important as developing complex models~\hyperref[ref1]{[1]}. At the same time, growing computational costs and the need to understand model predictions continue to raise questions about how these systems can be made more efficient, transparent, and reliable~\hyperref[ref2]{[2]}. I have always wanted to study this area in greater depth and pursue a career in research, as a research scientist developing machine learning systems that are efficient and interpretable. I am applying to the PhD program in Computer Science at The University of Texas at Austin as it provides an unparalleled opportunity to collaborate with experts, further my research, and lay the foundation for a fulfilling career in research.
+
+\vspace{8pt}
+
+\textbf{Research on Limiting Factors for a Model.} To understand what limits model performance, I first questioned why components like attention or residual blocks only improve results on certain tasks. Evaluating U-Net variants for lung segmentation ~\hyperref[ref3]{[3]}, I found that specific architectural blocks only yield gains when matched with specific data distributions. This showed me that architecture must align with data, prompting me to test whether the data itself was the deeper bottleneck. On the Kvasir-SEG benchmark ~\hyperref[ref4]{[4]}, I corrected conflated binary labels into a clinically accurate three-class ground truth with enhanced preprocessing. Trained on this refined data, a standard Attention U-Net reached a 0.9525 Dice score, a 1.2\% improvement over literature benchmarks, confirming that data refinement often yields higher returns than increasing model complexity.
+
+
+\vspace{8pt}
+
+\textbf{Research on Scarce and Unlabeled Data.} The harder problem is when sufficient labeled data does not exist at all. I first approached this through student-teacher pseudo-labeling~\hyperref[ref5]{[5]} with GAN-generated augmentation, and when the GAN's unreliable generations propagated errors into the student's training, I built A-PDF~\hyperref[ref6]{[6]}, a distribution-based framework to filter unreliable generations before they reached the student. A-PDF helped, but exposed a deeper issue, the approach still depended on an intermediate model being reliable, and filtering alone could not remove that dependency.
+
+This pushed me toward diffusion pretraining instead. I explored generation as a pretext task for segmentation with the idea that in generating images, the model would inherently understand properties of the image like organ boundaries. I pretrained a Denoising Diffusion Probabilistic Model on unlabeled abdominal CT scans and transferred its learned structural representations to organ segmentation. This pretraining improved liver segmentation Dice from 0.75$\pm$0.36 to 0.93$\pm$0.16, while a frozen encoder, never fine-tuned on a single segmentation label, retained over 80\% of the fully fine-tuned model's performance. These results suggested that the pretraining phase was learning meaningful structural priors rather than superficial statistics. However, diffusion pretraining remains computationally expensive, and its transfer was noticeably stronger for some organs than others. These limitations have made me interested in understanding how structural priors can be learned more efficiently and why some learned priors transfer better across tasks than others.
+
+
+
+\vspace{8pt}
+
+\textbf{Building Systems Under Real Constraints.} As Perception Lead on MAVERIC, a fully autonomous go-kart at CEAM, I led a 16-member computer vision team building the real-time perception stack around ROS 2, sensor integration, and a custom LiDAR-camera fusion pipeline for 3D scene understanding, achieving 56 FPS semantic segmentation and 16 FPS object detection in optimized C++ and NumPy~\hyperref[ref8]{[8]}. Around the same time, I co-founded Sensera~\hyperref[ref9]{[9]}, an early stage MedTech startup, aimed at uniting India's distributed clinic network. Here I built a personal health record system by decoupling OCR and NLP inference across 10 parallel GPU workers for sub-3-second processing, and a self-hosted semantic search and summarization system over medical records for clinics with sub-second, user-isolated retrieval and no dependence on external inference APIs. While a model's accuracy on a benchmarks and its behavior are real, these projects taught me how real latency, reliability constraints are completely different issues. I want to be someone who can answer both.
+
+\vspace{8pt}
+
+\textbf{Research on Incorporating Reasoning into Architecture.} At Shell, I worked on detecting defects in gear systems, where a single gear can exhibit multiple defect types. Observing experienced inspectors, I noticed that they reasoned hierarchically, first identifying whether a defect was present, then narrowing its category before determining the specific defect and severity. Existing flat classifiers ignored this structure, producing predictions that could be difficult to reconcile across levels. I therefore built HiME, a Hierarchical Multi-label Estimator~\hyperref[ref10]{[10]}, which predicts each stage jointly while structurally enforcing consistency between them. This also made its predictions easier to interpret, as a human could trace the model's decision from broad defect category to specific diagnosis. On our deployment dataset, HiME reached 91\% accuracy with 100\% hierarchical consistency, against 88\% accuracy and 72\% consistency for a flat classifier.
+
+\vspace{8pt}
+
+These experiences have given me the questions I want to pursue, but not yet the depth to answer them rigorously. I see graduate study as the crucial next step toward developing the independence I will need to pursue research as a career.
+
+\vspace{8pt}
+
+\textbf{Future Work.} The Computer Science PhD program at UT Austin provides the exact environment to build this foundation through its strength in generative modeling and efficient machine learning. I am especially interested in working with Prof. Qiang Liu, whose work on rectified flow~\hyperref[ref11]{[11]} and its extension to small, efficient one-step diffusion models~\hyperref[ref12]{[12]} examines exactly the cost problem I encountered in my own diffusion pretraining work. Prof. Mingyuan Zhou's work on score identity distillation~\hyperref[ref13]{[13]}, which distills pretrained diffusion models into fast, largely data-free one-step generators, connects closely with my interest in understanding how structural priors can be learned and transferred more efficiently, particularly the question of what can be preserved when a model is compressed this aggressively. I am also drawn to Prof. Haris Vikalo's group, whose work spans efficient inference under real resource constraints. After speaking with his student Haoran Zhang about his research on multi-layer hierarchical inference under partial and policy-dependent feedback, I was struck by how closely it parallels the problem I addressed in HiME, enforcing consistency across levels of a hierarchy, approached from the systems side rather than the classification side. I would be eager to explore this direction further within Prof. Vikalo's group and learn from the broader research community at UT Austin.
+
+\vspace{4pt}
+\hrule
+\vspace{4pt}
+
+{\footnotesize
+\textbf{References}
+\begin{enumerate}[leftmargin=1.3em, itemsep=1pt, label={[\arabic*]}]
+\item \label{ref1} Kumar, S., Datta, S., Singh, V., Singh, S., \& Sharma, R. Opportunities and Challenges in Data-Centric AI. \emph{IEEE Access}, 12, 33173--33189, 2024. \url{https://doi.org/10.1109/access.2024.3369417}
+\item \label{ref2} Cheng, Z., Wu, Y., Li, Y., Cai, L., \& Ihnaini, B. A Comprehensive Review of Explainable Artificial Intelligence (XAI) in Computer Vision. \emph{Sensors (Basel, Switzerland)}, 25, 2025. \url{https://doi.org/10.3390/s25134166}
+\item \label{ref3} Akshat G, Divyansh Gupta, Rashmi R. Benchmarking U-Net Variants for Lung Segmentation in Chest X-Rays. \emph{Presented at the 10th Conference on Computer Vision and Image Processing (CVIP), IIT Ropar}, 2025. \url{https://voyager2005.github.io}
+\item \label{ref4} Akshat G, Rashmi R. A Data-Centric Approach to Polyp Segmentation: Evaluating the Impact of Preprocessing and Ground-Truth Refinement. \url{https://voyager2005.github.io}
+\item \label{ref5} Akshat G, et al. Student-Teacher Pseudo-Labeling for Data-Scarce Medical Image Segmentation. \emph{}. \url{https://voyager2005.github.io}
+\item \label{ref6} Akshat G, et al. A-PDF: A Distribution-Based Evaluation Framework for Generative Data Augmentation Under Data Scarcity. \url{https://voyager2005.github.io}
+\item \label{ref7} Akshat G, Divyansh Gupta, Shaleen Bhatnagar, Shilpa Ankalaki, Tusar Kanti Mishra. Unsupervised Anatomical Feature Learning via Diffusion Models: Enhanced Medical Image Segmentation with Denoising Diffusion Probabilistic Models. \url{https://voyager2005.github.io}
+\item \label{ref8} Akshat Gururaj. MAVERIC: Autonomous Vehicle Sensor Fusion \& Object Tracking Stack.
+\url{https://doi.org/10.5281/zenodo.22018682}
+\item \label{ref9} Akshat Gururaj, Aditya Sinha. Sensera: A Privacy-First, Office-First, Personal Health Record Architecture with Consent-Scoped Clinical Access as a Serverless Clinical-Document, Machine-Learning Pipeline
+ \url{https://doi.org/10.5281/zenodo.22013979}
+\item \label{ref10} Akshat Gururaj, Shashank Sharma, Ashish Mishra, Vishal R Ahuja. HiME: A Consistent, Encoder-Agnostic Hierarchical Multi-label Estimator. \url{https://voyager2005.github.io}
+\item \label{ref11} Xingchao Liu, Chengyue Gong, Qiang Liu. Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow. \emph{International Conference on Learning Representations (ICLR)}, 2023. \url{https://arxiv.org/abs/2209.03003}
+\item \label{ref12} Yuanzhi Zhu, Xingchao Liu, Qiang Liu. SlimFlow: Training Smaller One-Step Diffusion Models with Rectified Flow. 2024. \url{https://arxiv.org/abs/2407.12718}
+\item \label{ref13} Mingyuan Zhou, Huangjie Zheng, Zhendong Wang, Mingzhang Yin, Hai Huang. Score Identity Distillation: Exponentially Fast Distillation of Pretrained Diffusion Models for One-Step Generation. \emph{International Conference on Machine Learning (ICML)}, 2024. \url{https://arxiv.org/abs/2404.04057}
+\end{enumerate}
+}
+
+\end{document}

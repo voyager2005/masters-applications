@@ -1,0 +1,70 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.8in]{geometry}
+\usepackage{times}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+\usepackage{enumitem}
+
+\titleformat{\section}{\normalfont\bfseries\large}{}{0pt}{}
+\titlespacing{\section}{0pt}{10pt}{4pt}
+\pagenumbering{gobble}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\linespread{0.97}
+
+\begin{document}
+
+{\small Statement of Purpose \hfill [University] PhD Applicant \par}
+{\small Akshat G \hfill \url{https://voyager2005.github.io} \par}
+\vspace{4pt}
+\hrule
+\vspace{8pt}
+
+My research interests lie in developing efficient, data-centric, and interpretable machine learning systems. Recent work in data-centric AI has emphasized that the quality, relevance, and utilization of training data can be as important as developing complex models~\hyperref[ref1]{[1]}. At the same time, growing computational costs and the need to understand model predictions continue to raise questions about how these systems can be made more efficient, transparent, and reliable~\hyperref[ref2]{[2]}. However, these challenges remain far from resolved, as models still depend heavily on the quantity and quality of labeled data, incur substantial computational costs, and produce predictions whose reasoning is difficult to assess. I have always wanted to study this area in greater depth and pursue a career in research, as a research scientist developing machine learning systems that are efficient and interpretable. I am applying to the [Program Name] at [University Name] as it provides an unparalleled opportunity to collaborate with experts, further my research, and lay the foundation for a fulfilling career in research.
+
+\vspace{8pt}
+
+\textbf{Research on Limiting Factors for a Model.} After my junior year, I found my research interests leaning toward understanding what actually limits a model's performance. I found it difficult to understand the quirks of small variations like attention gates and residual connections, the real problem was understanding what works where, and when, compared against a single dataset. In a benchmarking study of U-Net variants for lung segmentation~\hyperref[ref3]{[3]}, I compared U-Net, ResU-Net, Attention U-Net, and U-Net++ under identical conditions, since prior work evaluated these architectures inconsistently across datasets and preprocessing pipelines. What I learned was not a single best architecture, but that each variant was better suited to different segmentation demands. Under the guidance of Dr. Rashmi R, I was able to tabulate these findings and present them at the 10th Conference on Computer Vision and Image Processing (CVIP) at IIT Ropar.
+
+This motivated me to question whether correcting the data outperforms improving the architecture. I found that the widely used Kvasir-SEG benchmark included polyp and non-polyp regions, but the non-polyp region itself included both surrounding tissue and camera artifacts, informally, a black border around the frame, similar to what you would see in a fisheye lens. The surrounding tissue mattered too, so I refined this into a three-class ground truth, paired with a preprocessing pipeline addressing specular reflection and contrast. A standard Attention U-Net trained on this corrected data reached a Dice score of 0.9525, a 1.2\% improvement over the strongest binary-task state-of-the-art result reported in the literature. The bottleneck was in how the data was labeled, not in the model.
+
+\vspace{8pt}
+
+\textbf{Research on Scarce and Unlabeled Data.} If data quality can outperform architecture, the harder problem is when sufficient labeled data does not exist at all. I first approached this through student-teacher pseudo-labeling~\hyperref[ref5]{[5]}. A teacher model was trained on labeled data, and a GAN was used to generate additional unlabeled images for the student to learn from. In practice, the GAN's outputs were not reliably good, and this error propagated directly into the student's training. To address this, I developed A-PDF~\hyperref[ref6]{[6]}, a distribution-based evaluation framework that scores generated samples by comparing their extracted feature distribution, via a k-nearest-neighbors approach, against the feature distribution of real images, filtering out poor generations before they reached the student. A-PDF helped, but I remained unconvinced by pseudo-labeling itself. The step still depended on an intermediate model, teacher or generator, being reliably good, and no amount of filtering fully removed that dependency.
+
+This is what pushed me toward diffusion pretraining instead. I explored generation as a pretext task for segmentation with the idea that in generating images, the model would inherently understand the properties of the image like organ boundaries. I pretrained a Denoising Diffusion Probabilistic Model on unlabeled abdominal CT scans and transferred its learned structural representations to organ segmentation . This pretraining improved liver segmentation Dice from 0.75$\pm$0.36 to 0.93$\pm$0.16, and a frozen encoder, never fine-tuned on a single segmentation label, retained over 80\% of the fully fine-tuned model's performance, direct evidence that the pretraining phase learns real structural priors rather than superficial statistics. These results suggested that the pretraining phase was learning meaningful structural priors rather than superficial statistics. However, diffusion pretraining remains computationally expensive, and its transfer was noticeably stronger for some organs than others. These limitations have made me interested in understanding how structural priors can be learned more efficiently and why some learned priors transfer better across tasks than others.
+
+\vspace{8pt}
+
+\textbf{Research on Incorporating Reasoning into Architecture.} At Shell, I worked on detecting defects in gear systems, where a single gear can exhibit multiple defect types. Observing experienced inspectors, I noticed that they reasoned hierarchically, first identifying whether a defect was present, then narrowing its category before determining the specific defect and severity. Existing flat classifiers ignored this structure, producing predictions that could be difficult to reconcile across levels. I therefore built HiME, a Hierarchical Multi-label Estimator~\hyperref[ref8]{[8]}, which predicts each stage jointly while structurally enforcing consistency between them. This also made its predictions easier to interpret, as a human could trace the model's decision from broad defect category to specific diagnosis. On our deployment dataset, HiME reached 91\% accuracy with 100\% hierarchical consistency, against 88\% accuracy and 72\% consistency for a flat classifier.
+
+
+\textbf{[Closing paragraph: final learnings across all three directions, to be drafted.]}
+
+\section*{Why [University]?}
+
+My research interests sit at the intersection of data- and compute-efficient learning and models whose behavior can be understood and explained rather than treated as a black box. [University]'s [Department] is an exceptional fit, as several faculty's research aligns closely with these directions.
+
+I am inspired by [Professor Name]'s work on [specific research area, e.g. efficient or distilled diffusion models], which speaks directly to the cost problem I want to address in structural pretraining. [Professor Name]'s research on [specific area, e.g. representation learning theory or transfer], connects closely to the open question of why some learned priors transfer and others do not. I am also drawn to [Professor Name]'s work on [specific area, e.g. provable guarantees in learned systems], and would welcome the opportunity to explore how such guarantees extend to settings with limited or imperfect supervision.
+
+I look forward to contributing the same rigor and direct, evidence-first thinking that has shaped these five projects to [University], while learning from a community that pushes the frontier of what these methods can guarantee.
+
+\vspace{4pt}
+\hrule
+\vspace{4pt}
+
+{\footnotesize
+\textbf{References}
+\begin{enumerate}[leftmargin=1.3em, itemsep=1pt, label={[\arabic*]}]
+\item \label{ref1} Kumar, S., Datta, S., Singh, V., Singh, S., \& Sharma, R. Opportunities and Challenges in Data-Centric AI. \emph{IEEE Access}, 12, 33173--33189, 2024. \url{https://doi.org/10.1109/access.2024.3369417}
+\item \label{ref2} Cheng, Z., Wu, Y., Li, Y., Cai, L., \& Ihnaini, B. A Comprehensive Review of Explainable Artificial Intelligence (XAI) in Computer Vision. \emph{Sensors (Basel, Switzerland)}, 25, 2025. \url{https://doi.org/10.3390/s25134166}
+\item \label{ref3} Akshat G, Divyansh Gupta, Rashmi R. Benchmarking U-Net Variants for Lung Segmentation in Chest X-Rays. \emph{Presented at the 10th Conference on Computer Vision and Image Processing (CVIP), IIT Ropar}, 2025. \url{https://voyager2005.github.io}
+\item \label{ref4} Akshat G, Rashmi R. A Data-Centric Approach to Polyp Segmentation: Evaluating the Impact of Preprocessing and Ground-Truth Refinement. \emph{Under review, Scientific Reports}, 2026. \url{https://voyager2005.github.io}
+\item \label{ref5} Akshat G, et al. Student-Teacher Pseudo-Labeling for Data-Scarce Medical Image Segmentation. \emph{In preparation}, 2026. \url{https://voyager2005.github.io}
+\item \label{ref6} Akshat G, et al. A-PDF: A Distribution-Based Evaluation Framework for Generative Data Augmentation Under Data Scarcity. \emph{In preparation}, 2026. \url{https://voyager2005.github.io}
+\item \label{ref7} Akshat G, Divyansh Gupta, Shaleen Bhatnagar, Shilpa Ankalaki, Tusar Kanti Mishra. Unsupervised Anatomical Feature Learning via Diffusion Models: Enhanced Medical Image Segmentation with Denoising Diffusion Probabilistic Models. \emph{Under review, IEEE Access}, 2026. \url{https://voyager2005.github.io}
+\item \label{ref8} Akshat Gururaj, Shashank Sharma, Ashish Mishra, Vishal R Ahuja. HiME: A Consistent, Encoder-Agnostic Hierarchical Multi-label Estimator. \emph{Shell Research and Innovation}, 2026. \url{https://voyager2005.github.io}
+\end{enumerate}
+}
+
+\end{document}

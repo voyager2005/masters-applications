@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{times}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+\usepackage{enumitem}
+
+\titleformat{\section}{\normalfont\bfseries\large}{}{0pt}{}
+\titlespacing{\section}{0pt}{10pt}{4pt}
+\pagenumbering{gobble}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\linespread{0.97}
+
+\begin{document}
+
+{\small Statement of Purpose \hfill [University] PhD Applicant \par}
+{\small Akshat G \hfill \url{https://voyager2005.github.io} \par}
+\vspace{4pt}
+\hrule
+\vspace{8pt}
+
+How much can a model learn from data before it needs to be told what to look for, and how do we build that structure into a system rather than hope for it empirically? These are the questions I have spent the last two years working on, across architecture design, data quality, data scarcity, and unsupervised pretraining. This work has led to two publications, one presented at the 10th Conference on Computer Vision and Image Processing (CVIP) at IIT Ropar~\hyperref[ref1]{[1]} and one under review at \emph{Scientific Reports}~\hyperref[ref2]{[2]}, alongside two further papers in preparation~\hyperref[ref3]{[3]}\hyperref[ref4]{[4]} and one currently under review at \emph{IEEE Access}~\hyperref[ref5]{[5]}.
+
+I am currently a research intern at Shell Research and Innovation, where I work under Dr. Vishal Ahuja (PhD, University of Twente, Netherlands). I am also a research assistant at Manipal Institute of Technology with Dr. Rashmi R. Throughout my undergraduate studies, I have ranked in the top 5\% of my batch every year and have been on the Dean's List (Achievers Scholarship). I also serve as the Machine Learning Lead at CEAM, the university's Center of Excellence for Autonomous Mobility, where I conduct regular classes and organize workshops to expand access to AI education.
+
+\textbf{Long-term Vision.} I want to spend my career developing models that need less data and less compute to reach strong performance, and whose behavior can be understood and explained rather than treated as a black box. Efficiency, data-frugality, and explainability are, to me, the same underlying problem approached from different angles: a model that has genuinely learned the right structure from data should need less of it, and should be able to show its reasoning rather than hide it. Below, I outline the three directions I plan to advance in graduate study.
+
+\section*{1. What Actually Limits Model Performance: Architecture or Data}
+
+Most gains attributed to architectural sophistication are difficult to isolate from confounds in data and evaluation protocol. I began by testing this directly: in a benchmarking study of U-Net variants for lung segmentation~\hyperref[ref1]{[1]}, I compared U-Net, ResU-Net, Attention U-Net, and U-Net++ under identical conditions on a combined chest X-ray dataset, since prior work evaluated these architectures inconsistently across datasets and preprocessing pipelines. The result was not a single best architecture; each structural addition, attention gates, residual connections, dense skip pathways, helped or hurt depending on whether the task demanded boundary precision or overall region overlap. The work was presented at the 10th Conference on Computer Vision and Image Processing (CVIP) at IIT Ropar.
+
+This motivated a sharper question: could correcting the data outperform improving the architecture. In a data-centric polyp segmentation study~\hyperref[ref2]{[2]}, I identified a labeling flaw in the widely used Kvasir-SEG benchmark, its binary masks collapsed surrounding tissue and non-anatomical image borders into a single "non-polyp" class, and designed a breadth-first-search algorithm to refine this into a clinically accurate three-class ground truth, paired with a preprocessing pipeline addressing specular reflection and contrast. A standard Attention U-Net trained on this corrected data reached a Dice score of 0.9525 and IoU of 0.9115, outperforming several published architectures with substantially higher parameter counts trained on the uncorrected task. The bottleneck was in how the data was labeled, not in the model.
+
+\section*{2. Learning from Scarce and Unlabeled Data}
+
+If data quality can outperform architecture, the harder problem is when sufficient labeled data does not exist at all. I first approached this through student-teacher pseudo-labeling~\hyperref[ref3]{[3]}, training a teacher model on limited labeled data to generate labels for a larger unlabeled set. This exposed a structural weakness: the student's quality is capped by the teacher's, and the teacher's errors propagate rather than correct. I extended this with a GAN-based augmentation approach and a novel evaluation framework, A-PDF~\hyperref[ref4]{[4]}, addressing a specific failure of generative augmentation: a GAN's own discriminator is frequently an unreliable judge of sample quality under limited data. A-PDF instead scores generated samples by comparing their extracted feature distribution, via a k-nearest-neighbors approach, against the feature distribution of real images, independent of the discriminator's own judgment.
+
+Both approaches shared the same limitation: they depend on an intermediate model already being good, and if it is imperfect, its errors compound rather than wash out. This motivated my most recent work~\hyperref[ref5]{[5]}, currently under review, pretraining a Denoising Diffusion Probabilistic Model on unlabeled abdominal CT scans and transferring the learned encoder to downstream organ segmentation, with no intermediate synthetic label at any stage. Diffusion pretraining improved liver segmentation Dice from 0.75$\pm$0.36 to 0.93$\pm$0.16, and a frozen encoder, never fine-tuned on a single segmentation label, retained over 80\% of the fully fine-tuned model's performance, direct evidence that the pretraining phase learns real structural priors rather than superficial statistics. However, diffusion pretraining is computationally expensive, and its transfer was markedly stronger for some organs than others in my own results. During my PhD, I want to pursue two connected questions: how these structural priors can be obtained far more cheaply, and why some learned priors transfer well across tasks while others do not.
+
+\section*{3. Structural Guarantees Beyond a Single Domain}
+
+At Shell Research and Innovation, I worked on HiME~\hyperref[ref6]{[6]}, a hierarchical multi-label classification architecture, as an industry deployment problem: flat multi-label classifiers routinely predict a child class without its required parent, violating the taxonomy they are meant to respect. Rather than training a separate classifier per node or repairing violations after prediction, HiME predicts an entire multi-level taxonomy from one shared backbone with a lightweight head per level, using a chain rule at inference to convert per-level conditional probabilities into hierarchy-respecting absolute ones. I proved formally that this decoding can never assert a child without its parent, and validated it empirically at 1.000 consistency, zero violations, across a large, severely imbalanced benchmark. This project was my first real test of the explainability side of the vision above: a system whose behavior is provable by construction is, by definition, one whose reasoning can be inspected rather than approximated after the fact. During my PhD, I want to explore where else this kind of built-in, inspectable structure can substitute for the data and compute that models otherwise rely on to reach the same behavior empirically.
+
+\section*{Why [University]?}
+
+My research interests sit at the intersection of data- and compute-efficient learning and models whose behavior can be understood and explained rather than treated as a black box. [University]'s [Department] is an exceptional fit, as several faculty's research aligns closely with these directions.
+
+I am inspired by [Professor Name]'s work on [specific research area, e.g. efficient or distilled diffusion models], which speaks directly to the cost problem I want to address in structural pretraining. [Professor Name]'s research on [specific area, e.g. representation learning theory or transfer], connects closely to the open question of why some learned priors transfer and others do not. I am also drawn to [Professor Name]'s work on [specific area, e.g. provable guarantees in learned systems], and would welcome the opportunity to explore how such guarantees extend to settings with limited or imperfect supervision.
+
+I look forward to contributing the same rigor and direct, evidence-first thinking that has shaped these five projects to [University], while learning from a community that pushes the frontier of what these methods can guarantee.
+
+\vspace{4pt}
+\hrule
+\vspace{4pt}
+
+{\footnotesize
+\textbf{References}
+\begin{enumerate}[leftmargin=1.3em, itemsep=1pt, label={[\arabic*]}]
+\item \label{ref1} Akshat G, Divyansh Gupta, Rashmi R. Benchmarking U-Net Variants for Lung Segmentation in Chest X-Rays. \emph{Presented at the 10th Conference on Computer Vision and Image Processing (CVIP), IIT Ropar}, 2025. \url{https://voyager2005.github.io}
+\item \label{ref2} Akshat G, Rashmi R. A Data-Centric Approach to Polyp Segmentation: Evaluating the Impact of Preprocessing and Ground-Truth Refinement. \emph{Under review, Scientific Reports}, 2026. \url{https://voyager2005.github.io}
+\item \label{ref3} Akshat G, et al. Student-Teacher Pseudo-Labeling for Data-Scarce Medical Image Segmentation. \emph{In preparation}, 2026. \url{https://voyager2005.github.io}
+\item \label{ref4} Akshat G, et al. A-PDF: A Distribution-Based Evaluation Framework for Generative Data Augmentation Under Data Scarcity. \emph{In preparation}, 2026. \url{https://voyager2005.github.io}
+\item \label{ref5} Akshat G, Divyansh Gupta, Shaleen Bhatnagar, Shilpa Ankalaki, Tusar Kanti Mishra. Unsupervised Anatomical Feature Learning via Diffusion Models: Enhanced Medical Image Segmentation with Denoising Diffusion Probabilistic Models. \emph{Under review, IEEE Access}, 2026. \url{https://voyager2005.github.io}
+\item \label{ref6} Akshat Gururaj, Shashank Sharma, Ashish Mishra, Vishal R Ahuja. HiME: A Consistent, Encoder-Agnostic Hierarchical Multi-label Estimator. \emph{Shell Research and Innovation}, 2026. \url{https://voyager2005.github.io}
+\end{enumerate}
+}
+
+\end{document}
