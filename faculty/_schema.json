@@ -1,0 +1,42 @@
+{
+  "_comment": "Reference schema. Each subagent writes faculty/<slug>.json matching this shape. Do not edit by hand; regenerate the master sheet from these files.",
+  "university": "string",
+  "program_meta": {
+    "program_name": "string",
+    "degree_target": "PhD | MSc | MS->PhD",
+    "sop_limit": "string - exact stated word/page limit, or 'not stated'",
+    "extra_essays": "string - e.g. separate personal/diversity statement and its limit",
+    "deadline_fall_2027": "string",
+    "lor_count": "string",
+    "gre": "string",
+    "english_test": "string - include India exemption status if any",
+    "app_fee": "string",
+    "faculty_directory_url": "string",
+    "advisor_model": "string - are PhD students admitted to a specific advisor, to the dept, or via rotations?",
+    "ms_research_access": "string - can master's students join labs / do a thesis?",
+    "notes": "string"
+  },
+  "faculty": [
+    {
+      "professor": "string",
+      "rank": "string",
+      "department": "string",
+      "lab": "string",
+      "match": "Close | Partial",
+      "research_areas": "string",
+      "why_match": "string - MUST name a specific result of Akshat's AND a specific paper of theirs",
+      "key_paper_1": "string - Title, venue, year",
+      "key_paper_2": "string - Title, venue, year",
+      "homepage": "string",
+      "scholar": "string",
+      "taking_students": "string - Yes | No | Unstated, plus evidence and date",
+      "contact_policy": "string - VERBATIM any instruction about emailing; 'not stated' if none",
+      "email": "string - only if publicly listed; else 'not listed'",
+      "email_angle": "string - one sentence opening hook",
+      "source_urls": "string - semicolon separated",
+      "verified_date": "YYYY-MM-DD",
+      "confidence": "High | Medium | Low",
+      "notes": "string"
+    }
+  ]
+}
